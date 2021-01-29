@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,14 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/* Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+}); */
+Route::post('auth/login','Api\AuthController@login');
+Route::group(['middleware'=>['apiJWT']], function ()
+{
+    Route::post('auth/logout', 'Api\AuthController@logout');
+    Route::post('auth/refresh', 'Api\AuthController@refresh');
+    Route::post('auth/me', 'Api\AuthController@me');
+    Route::get('users', 'Api\UserController@index');
 });
